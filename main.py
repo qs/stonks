@@ -36,7 +36,7 @@ async def analyze_stock(ticker: str = Form(...)):
             "theme": "dark",
             "interval": "15m",
             "session": "extended",
-            "symbol": f"COINBASE:{ticker}",
+            "symbol": f"{ticker}",
             "timezone": "America/New_York",
             "studies": [
                 {

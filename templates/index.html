@@ -6,6 +6,7 @@
     <title>Stock Analysis</title>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
     <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
@@ -24,17 +25,165 @@
             60% { text-shadow: .25em 0 0 black, .5em 0 0 rgba(0,0,0,0); }
             80%, 100% { text-shadow: .25em 0 0 black, .5em 0 0 black; }
         }
+        
+        .sticky-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 15px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        body {
+            padding-bottom: 100px; /* Add padding to prevent content from being hidden behind the sticky form */
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .range-container input[type="range"] {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .range-container output {
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* New styles for select element */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 16px;
+            color: #495057;
+        }
+
+        select:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        optgroup {
+            font-weight: bold;
+        }
+
+        option {
+            padding: 5px;
+        }
+
+        /* Style for the form containing the select */
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            display: block;
+        }
+
+        form button[type="submit"] {
+            align-self: unset;
+            margin-top: 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Updated styles for inline form */
+        .inline-form {
+            display: flex;
+            align-items: stretch;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .inline-form select {
+            flex-grow: 1;
+            margin-bottom: 0;
+            height: 38px; /* Match button height */
+        }
+
+        .inline-form button {
+            flex-shrink: 0;
+            height: 38px;
+            padding: 0 20px;
+            margin-top: 0;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
     <h1>Stock Analysis</h1>
     <form hx-post="/analyze" hx-target="#result" hx-swap="innerHTML" hx-indicator="#loading">
-        <label for="ticker">NASDAQ Ticker:</label>
-        <input type="text" id="ticker" name="ticker" required>
-        <button type="submit">Analyze</button>
+        <label for="ticker">Select a ticker:</label>
+        <div class="inline-form">
+            <select id="ticker" name="ticker" required>
+                <option value="">Choose a stock</option>
+                <optgroup label="NASDAQ">
+                    <option value="NASDAQ:AAPL">Apple Inc. (AAPL)</option>
+                    <option value="NASDAQ:MSFT">Microsoft Corporation (MSFT)</option>
+                    <option value="NASDAQ:GOOGL">Alphabet Inc. (GOOGL)</option>
+                </optgroup>
+                <optgroup label="LON">
+                    <option value="LON:VOD">Vodafone Group plc (VOD)</option>
+                    <option value="LON:BP">BP plc (BP)</option>
+                    <option value="LON:HSBA">HSBC Holdings plc (HSBA)</option>
+                </optgroup>
+                <optgroup label="COINBASE">
+                    <option value="COINBASE:BTCUSD">Bitcoin/USD (BTC-USD)</option>
+                    <option value="COINBASE:ETHUSD">Ethereum/USD (ETH-USD)</option>
+                    <option value="COINBASE:XRPUSD">Ripple/USD (XRP-USD)</option>
+                </optgroup>
+            </select>
+            <button type="submit" class="btn btn-primary">Analyze</button>
+        </div>
     </form>
     <div id="loading" class="loading">Analyzing</div>
     <div id="result"></div>
+    <br /><br />
+    <div class="container mt-5">
+    </div>
+
+    <!-- Move the form outside the container and add the sticky-bottom class -->
+    <div class="sticky-bottom">
+        <div class="container">
+            <form class="mt-4">
+                <div class="mb-3">
+                    <label for="stockAmount" class="form-label">Amount of stocks:</label>
+                    <div class="range-container">
+                        <input type="range" class="form-range" id="stockAmount" min="0" max="1000" value="500">
+                        <output for="stockAmount" id="stockAmountValue">500</output>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-success me-2">Buy</button>
+                    <button type="submit" class="btn btn-danger">Sell</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         document.body.addEventListener('htmx:beforeRequest', function(event) {
@@ -64,6 +213,13 @@
             analysisDiv.className = 'markdown-body';
             analysisDiv.innerHTML = marked.parse(response.analysis);
             resultDiv.appendChild(analysisDiv);
+        });
+
+        const stockAmount = document.getElementById('stockAmount');
+        const stockAmountValue = document.getElementById('stockAmountValue');
+
+        stockAmount.addEventListener('input', function() {
+            stockAmountValue.textContent = this.value;
         });
     </script>
 </body>
