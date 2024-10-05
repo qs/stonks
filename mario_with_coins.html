@@ -1,0 +1,341 @@
+<html>
+
+<head>
+    <title>Pure CSS Mario</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        .container {
+            display: inline-grid;
+            width: 260px;
+            height: 360px;
+            padding: 20px;
+            grid-template-columns: repeat(13, 20px);
+            grid-template-rows: repeat(17, 20px);
+            background-color: #FFFFFF; /* Set background to white */
+            position: relative;
+            animation: walk 3s infinite linear;
+        }
+
+        @keyframes walk {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(200px);
+            }
+        }
+
+        @keyframes left-leg-move {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-20deg);
+            }
+        }
+
+        @keyframes right-leg-move {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(20deg);
+            }
+        }
+
+        @keyframes left-shoe-move {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes right-shoe-move {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .red {
+            background: #FE0002;
+        }
+
+        .brown {
+            background: #6A0400;
+        }
+
+        .skin {
+            background: #FFD987;
+        }
+
+        .black {
+            background: #000000;
+        }
+
+        .blue {
+            background: #0001FC;
+        }
+
+        .yellow {
+            background: #FFFF00;
+        }
+
+        .hat1 {
+            grid-row: 2 / span 1;
+            grid-column: 4 / span 6;
+        }
+
+        .hat2 {
+            grid-row: 3 / span 1;
+            grid-column: 3 / span 10;
+        }
+
+        .head {
+            grid-row: 4 / span 5;
+            grid-column: 3 / span 8;
+        }
+
+        .nose {
+            grid-row: 5 / span 2;
+            grid-column: 11 / span 2;
+        }
+
+        .snoot {
+            grid-row: 6 / span 1;
+            grid-column: 13 / span 1;
+        }
+
+        .eye {
+            grid-row: 4 / span 2;
+            grid-column: 9 / span 1;
+        }
+
+        .mustache1 {
+            grid-row: 7 / span 1;
+            grid-column: 9 / span 4;
+        }
+
+        .mustache2 {
+            grid-row: 6 / span 1;
+            grid-column: 10 / span 1;
+        }
+
+        .chin {
+            grid-row: 8 / span 1;
+            grid-column: 11 / span 1;
+        }
+
+        .hair1 {
+            grid-row: 4 / span 1;
+            grid-column: 3 / span 3;
+        }
+
+        .hair2 {
+            grid-row: 5 / span 3;
+            grid-column: 2 / span 1;
+        }
+
+        .hair3 {
+            grid-row: 5 / span 2;
+            grid-column: 4 / span 1;
+        }
+
+        .hair4 {
+            grid-row: 6 / span 1;
+            grid-column: 5 / span 1;
+        }
+
+        .hair5 {
+            grid-row: 7 / span 1;
+            grid-column: 3 / span 1;
+        }
+
+        .torso {
+            grid-row: 9 / span 4;
+            grid-column: 3 / span 7;
+        }
+
+        .sleeves1 {
+            grid-row: 10 / span 1;
+            grid-column: 2 / span 10;
+        }
+
+        .sleeves2 {
+            grid-row: 11 / span 1;
+            grid-column: 1 / span 12;
+        }
+
+        .sleeves3 {
+            grid-row: 12 / span 1;
+            grid-column: 10 / span 1;
+        }
+
+        .hands {
+            grid-row: 12 / span 3;
+            grid-column: 1 / span 12;
+        }
+
+        .waist {
+            grid-row: 12 / span 3;
+            grid-column: 4 / span 6;
+        }
+
+        /* Left Leg */
+        .pant1 {
+            grid-row: 14 / span 2;
+            grid-column: 8 / span 3;
+            animation: right-leg-move 0.5s infinite;
+        }
+
+        /* Right Leg */
+        .pant2 {
+            grid-row: 14 / span 2;
+            grid-column: 3 / span 3;
+            animation: left-leg-move 0.5s infinite;
+        }
+
+        /* Left Shoe */
+        .left-shoe1 {
+            grid-row: 16 / span 2;
+            grid-column: 2 / span 3;
+            animation: left-shoe-move 0.5s infinite;
+        }
+
+        .left-shoe2 {
+            grid-row: 17 / span 1;
+            grid-column: 1 / span 1;
+            animation: left-shoe-move 0.5s infinite;
+        }
+
+        /* Right Shoe */
+        .right-shoe1 {
+            grid-row: 16 / span 2;
+            grid-column: 9 / span 3;
+            animation: right-shoe-move 0.5s infinite;
+        }
+
+        .right-shoe2 {
+            grid-row: 17 / span 1;
+            grid-column: 12 / span 1;
+            animation: right-shoe-move 0.5s infinite;
+        }
+
+        .left-brace {
+            grid-row: 9 / span 3;
+            grid-column: 5 / span 1;
+        }
+
+        .right-brace {
+            grid-row: 10 / span 2;
+            grid-column: 8 / span 1;
+        }
+
+        .brace-between {
+            grid-row: 11 / span 1;
+            grid-column: 5 / span 4;
+        }
+
+        .left-button {
+            grid-row: 12 / span 1;
+            grid-column: 5 / span 1;
+        }
+
+        .right-button {
+            grid-row: 12 / span 1;
+            grid-column: 8 / span 1;
+        }
+      .coin {
+    background-color: gold; /* Gold color for the coin */
+    border-radius: 50%; /* Make the coin round */
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+    </style>
+</head>
+
+  
+<body>
+<div class="mario-container">
+  
+<!-- Randomly placed coins -->
+<div class="coin" style="top: 240px; left: 350px;"></div>
+<div class="coin" style="top: 80px; left: 500px;"></div>
+<div class="coin" style="top: 260px; left: 450px;"></div>
+<div class="coin" style="top: 40px; left: 280px;"></div>
+<div class="coin" style="top: 100px; left: 400px;"></div>
+<div class="coin" style="top: 180px; left: 320px;"></div>
+<div class="coin" style="top: 260px; left: 480px;"></div>
+<div class="coin" style="top: 360px; left: 360px;"></div>
+<div class="coin" style="top: 80px; left: 420px;"></div>
+<div class="coin" style="top: 140px; left: 520px;"></div>
+<div class="coin" style="top: 100px; left: 600px;"></div>
+<div class="coin" style="top: 40px; left: 580px;"></div>
+<div class="coin" style="top: 300px; left: 520px;"></div>
+<div class="coin" style="top: 380px; left: 480px;"></div>
+<div class="coin" style="top: 240px; left: 640px;"></div>
+<div class="coin" style="top: 200px; left: 700px;"></div>
+<div class="coin" style="top: 280px; left: 560px;"></div>
+<div class="coin" style="top: 340px; left: 620px;"></div>
+<div class="coin" style="top: 60px; left: 700px;"></div>
+<div class="coin" style="top: 160px; left: 540px;"></div>  
+    <div class="coin" style="top: 60px; left: 340px;"></div>
+<div class="coin" style="top: 100px; left: 360px;"></div>
+<div class="coin" style="top: 140px; left: 300px;"></div>
+<div class="coin" style="top: 120px; left: 360px;"></div>
+  
+    <div class="red hat1"></div>
+    <div class="red hat2"></div>
+    <div class="skin head"></div>
+    <div class="skin nose"></div>
+    <div class="skin snoot"></div>
+    <div class="black eye"></div>
+    <div class="black mustache1"></div>
+    <div class="black mustache2"></div>
+    <div class="skin chin"></div>
+    <div class="brown hair1"></div>
+    <div class="brown hair2"></div>
+    <div class="brown hair3"></div>
+    <div class="brown hair4"></div>
+    <div class="brown hair5"></div>
+    <div class="skin hands"></div>
+    <div class="red torso"></div>
+    <div class="red sleeves1"></div>
+    <div class="red sleeves2"></div>
+    <div class="red sleeves3"></div>
+    <div class="blue waist"></div>
+    <div class="blue pant1"></div>
+    <div class="blue pant2"></div>
+    <div class="blue left-brace"></div>
+    <div class="blue right-brace"></div>
+    <div class="blue brace-between"></div>
+    <div class="yellow left-button"></div>
+    <div class="yellow right-button"></div>
+    <div class="brown left-shoe1"></div>
+    <div class="brown left-shoe2"></div>
+    <div class="brown right-shoe1"></div>
+    <div class="brown right-shoe2"></div>
+
+
+
+</div>
+<p>
+<!--     <a href="https://github.com/adwaitv/css-art/">https://github.com/adwaitv/css-art/</a> -->
+</p>
+</body>
+
+</html>
