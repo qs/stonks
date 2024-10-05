@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        form { margin-bottom: 20px; }
+        #result { display: none; }
+        img { max-width: 100%; height: auto; margin-bottom: 20px; }
+        .markdown-body { padding: 20px; background-color: #f6f8fa; border-radius: 5px; }
+        .loading { display: none; font-size: 24px; text-align: center; margin-top: 20px; }
+        .loading:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0);}
+            40% { color: black; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            60% { text-shadow: .25em 0 0 black, .5em 0 0 rgba(0,0,0,0); }
+            80%, 100% { text-shadow: .25em 0 0 black, .5em 0 0 black; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Analysis</h1>
+    <form hx-post="/analyze" hx-target="#result" hx-swap="innerHTML" hx-indicator="#loading">
+        <label for="ticker">NASDAQ Ticker:</label>
+        <input type="text" id="ticker" name="ticker" required>
+        <button type="submit">Analyze</button>
+    </form>
+    <div id="loading" class="loading">Analyzing</div>
+    <div id="result"></div>
+
+    <script>
+        document.body.addEventListener('htmx:beforeRequest', function(event) {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+        });
+
+        document.body.addEventListener('htmx:afterSwap', function(event) {
+            document.getElementById('loading').style.display = 'none';
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            
+            // Parse the JSON response
+            const response = JSON.parse(resultDiv.textContent);
+            
+            // Clear the existing content
+            resultDiv.innerHTML = '';
+            
+            // Create and append the image
+            const img = document.createElement('img');
+            img.src = response.chart_image;
+            img.alt = 'Stock Chart';
+            resultDiv.appendChild(img);
+            
+            // Create a div for the markdown content
+            const analysisDiv = document.createElement('div');
+            analysisDiv.className = 'markdown-body';
+            analysisDiv.innerHTML = marked.parse(response.analysis);
+            resultDiv.appendChild(analysisDiv);
+        });
+    </script>
+</body>
+</html>
