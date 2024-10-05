@@ -1,0 +1,2 @@
+# stonks
+Mistral tech analysis
