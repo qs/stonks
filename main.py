@@ -12,6 +12,7 @@ templates = Jinja2Templates(directory="templates")
 
 CHART_IMG_API_KEY = os.environ.get("CHART_IMG_API_KEY")
 MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY")
+BRAVE_API_KEY = os.environ.get("BRAVE_API_KEY")
 
 model = "pixtral-12b-2409"
 mistral_client = Mistral(api_key=MISTRAL_API_KEY)
@@ -113,6 +114,18 @@ async def analyze_stock(ticker: str = Form(...)):
     with open("chart.png", "wb") as f:
         f.write(chart_image)
 
+    # Fetch news
+    news_response = requests.get(
+        f"https://api.search.brave.com/res/v1/news/search?q={ticker.split(':')[1]}&count=10&country=us&search_lang=en&spellcheck=1",
+        headers={
+            "Accept": "application/json",
+            "Accept-Encoding": "gzip",
+            "X-Subscription-Token": BRAVE_API_KEY
+        }
+    )
+    news = [f"{item['title']} - {item['description']}" for item in news_response.json()['results']]
+    print(f"News fetched: {news_response.status_code}")
+
     # Analyze the chart using Mistral
     chat_response = mistral_client.chat.complete(
         model=model,
@@ -127,6 +140,10 @@ async def analyze_stock(ticker: str = Form(...)):
                     {
                         "type": "image_url",
                         "image_url": f"data:image/png;base64,{encoded_image}"
+                    },
+                    {
+                        "type": "text",
+                        "text": f"Here is the news for {ticker}: {news}\n\nAdd analysis of the news on the technical analysis"
                     }
                 ]
             },
